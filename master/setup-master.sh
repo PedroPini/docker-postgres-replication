@@ -1,4 +1,5 @@
 #!/bin/bash
+#allow connection with md5 encryption password
 echo "host replication all 0.0.0.0/0 md5" >> "$PGDATA/pg_hba.conf"
 
 set -e
@@ -8,10 +9,11 @@ EOSQL
 
 cat >> ${PGDATA}/postgresql.conf <<EOF
 
-wal_level = hot_standby
-archive_mode = on
-archive_command = 'cd .'
+listen_addresses = '*'
+wal_level = replica
+max_worker_processes = 23
+max_locks_per_transaction = 1000
 max_wal_senders = 8
-wal_keep_segments = 8
-hot_standby = on
+max_replication_slots = 1
+synchronous_commit = off
 EOF

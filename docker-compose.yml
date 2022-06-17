@@ -1,28 +1,43 @@
 version: "3"
 services:
+  pgAdmin:
+    restart: always
+    image: dpage/pgadmin4
+    ports:
+        - "8000:80"
+        - "443:443"
+    environment:
+        PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+        PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
   pg_master:
     build: ./master
     volumes:
       - pg_data:/var/lib/postgresql/data
+    hostname: pg_master
+    # ports:
+    #   - "5432:5432"
     environment:
-      - POSTGRES_USER=hamed
-      - POSTGRES_PASSWORD=123456
-      - POSTGRES_DB=hamed
-      - PG_REP_USER=rep
-      - PG_REP_PASSWORD=123456
+       POSTGRES_USER: ${POSTGRES_USER}
+       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+       POSTGRES_DB: ${POSTGRES_DB}
+       PG_REP_USER: ${PG_REP_USER}
+       PG_REP_PASSWORD: ${PG_REP_PASSWORD}
     networks:
       default:
         aliases:
           - pg_cluster
   pg_slave:
     build: ./slave
+    hostname: pg_slave
+    # ports:
+    #   - "5433:5432"
     environment:
-      - POSTGRES_USER=hamed
-      - POSTGRES_PASSWORD=123456
-      - POSTGRES_DB=hamed
-      - PG_REP_USER=rep
-      - PG_REP_PASSWORD=123456
-      - PG_MASTER_HOST=pg_master
+       POSTGRES_USER: ${POSTGRES_USER}
+       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+       POSTGRES_DB: ${POSTGRES_DB}
+       PG_REP_USER: ${PG_REP_USER}
+       PG_REP_PASSWORD: ${PG_REP_PASSWORD}
+       PG_MASTER_HOST: ${PG_MASTER_HOST}
     networks:
       default:
         aliases:

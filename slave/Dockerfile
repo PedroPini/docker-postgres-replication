@@ -1,4 +1,4 @@
-FROM postgres:9.6-alpine
+FROM timescale/timescaledb-postgis:latest-pg13
 
 ENV GOSU_VERSION 1.10
 
@@ -8,7 +8,7 @@ RUN chmod +x /usr/bin/gosu
 RUN apk add --update iputils
 RUN apk add --update htop
 
-# COPY ./setup-slave.sh /docker-entrypoint-initdb.d
+#COPY ./setup-slave.sh /docker-entrypoint-initdb.d
 COPY ./docker-entrypoint.sh /docker-entrypoint.sh
 
 RUN chmod +x /docker-entrypoint.sh

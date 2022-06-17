@@ -1,4 +1,4 @@
-FROM postgres:9.6-alpine
+FROM timescale/timescaledb-postgis:latest-pg13
 
 RUN apk add --update htop
 
